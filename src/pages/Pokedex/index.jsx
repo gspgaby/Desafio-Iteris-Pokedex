@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import PokemonsList from '../../components/PokemonsList';
-import PokemonsData from '../../components/PokemonData';
+// import PokemonsData from '../../components/PokemonData';
 
 function Pokedex() {
   return (
@@ -23,9 +23,7 @@ function Pokedex() {
           <Grid item xs={6}>
             <PokemonsList />
           </Grid>
-          <Grid item xs={6}>
-            <PokemonsData />
-          </Grid>
+          <Grid item xs={6} />
         </Grid>
       </Box>
     </Grid>

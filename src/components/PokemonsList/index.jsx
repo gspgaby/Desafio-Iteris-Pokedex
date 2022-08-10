@@ -13,10 +13,12 @@ import api from '../../api/api';
 
 function PokemonsList() {
   const [pokemon, setPokemon] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   useEffect(() => {
-    async function loadPokemon() {
+    async function loadPokemon(limit = 1000, offset = 0) {
       try {
-        const response = await api.get('/');
+        const response = await api.get(`/?limit=${limit}&offset=${offset}`);
         setPokemon(response.data.results);
       } catch (error) {
         alert(error);
@@ -25,14 +27,22 @@ function PokemonsList() {
     loadPokemon();
   }, []);
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
+  const handleClick = async (pok) => {
+    const response = await api.get(pok);
+    console.log(response.data);
+  };
+
   return (
-    <Grid
-      container
-      justify="center"
-      alignItems="center"
-      direction="column"
-      sx={{ marginTop: '10vh' }}
-    >
+    <Grid container justify="center" alignItems="center" direction="column">
       <Box
         sx={{
           borderRadius: '10px',
@@ -40,32 +50,38 @@ function PokemonsList() {
           textAlign: 'center',
         }}
       >
-        <Paper sx={{ padding: '30px' }}>
-          <TableContainer component={Paper} sx={{ marginTop: '30px' }}>
-            <Table size="small" aria-label="a dense table">
-              <TableHead sx={{ backgroundColor: '#fa0909' }}>
-                <TableRow>
-                  <TableCell sx={{ color: '#fff', fontWeight: 'bold' }}>
-                    Pokemons
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {pokemon.map((row) => (
+        <TableContainer component={Paper} sx={{ marginTop: '30px' }}>
+          <Table size="small" aria-label="a dense table">
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ fontWeight: 'bold' }}>Pokemons</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {pokemon
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row) => (
                   <TableRow
-                    key={row.id}
+                    key={row.name}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    onClick={() => handleClick(row)}
                   >
                     <TableCell component="th" scope="row">
                       {row.name}
                     </TableCell>
                   </TableRow>
                 ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination rowsPerPageOptions={[5, 10, 25]} component="div" />
-        </Paper>
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          component="div"
+          count={pokemon.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </Box>
     </Grid>
   );

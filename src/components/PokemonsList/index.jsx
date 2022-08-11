@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
+import LinearProgress from '@mui/material/LinearProgress';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -19,6 +21,7 @@ function PokemonsList() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [pokemonData, setPokemonData] = useState({});
   useEffect(() => {
+    /* busca listagem de pokemoms */
     async function loadPokemon(limit = 1000, offset = 0) {
       try {
         const response = await api.get(`/?limit=${limit}&offset=${offset}`);
@@ -30,6 +33,7 @@ function PokemonsList() {
     loadPokemon();
   }, []);
 
+  /* paginação */
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -39,28 +43,32 @@ function PokemonsList() {
     setPage(0);
   };
 
+  /* busca dados dos pokemons */
   const handleClick = async (pok) => {
     const response = await api.get(pok.url);
     const newData = {
+      id: response.data.game_indices[3].game_index,
       name: response.data.forms[0].name,
       img: response.data.sprites.other['official-artwork'].front_default,
       hp: response.data.stats[0].base_stat,
       attack: response.data.stats[1].base_stat,
       defense: response.data.stats[2].base_stat,
-      spattack: response.data.stats[3].base_stat,
-      spdefense: response.data.stats[4].base_stat,
       speed: response.data.stats[5].base_stat,
       type1: response.data.types[0].type.name,
-      type2: response.data.types[1].type.name,
+      type2: response.data.types[1]?.type.name,
     };
     console.log(newData);
     setPokemonData(newData);
   };
 
+  const handleClick2 = () => {
+    console.log('clicado');
+  };
+
   return (
-    <Box sx={{ flexGrow: 1, marginTop: '20px', width: '95%' }}>
+    <Box sx={{ flexGrow: 1, width: '95%', padding: '20px' }}>
       <Grid container spacing={2}>
-        <Grid item xs={6}>
+        <Grid item xs={5}>
           <Grid
             container
             justify="center"
@@ -74,11 +82,24 @@ function PokemonsList() {
                 textAlign: 'center',
               }}
             >
-              <TableContainer component={Paper} sx={{ marginTop: '30px' }}>
+              <TableContainer
+                component={Paper}
+                sx={{
+                  marginTop: '15px',
+                  backgroundColor: '#f3bf10',
+                  border: '2px solid #000',
+                }}
+              >
                 <Table size="small" aria-label="a dense table">
                   <TableHead>
                     <TableRow>
-                      <TableCell sx={{ fontWeight: 'bold' }}>
+                      <TableCell
+                        sx={{
+                          fontWeight: 'bold',
+                          fontSize: '18px',
+                          border: '1px solid #000',
+                        }}
+                      >
                         Pokemons
                       </TableCell>
                     </TableRow>
@@ -97,7 +118,14 @@ function PokemonsList() {
                           }}
                           onClick={() => handleClick(row)}
                         >
-                          <TableCell component="th" scope="row">
+                          <TableCell
+                            component="th"
+                            scope="row"
+                            sx={{
+                              fontWeight: 'bold',
+                              border: '1px solid #000',
+                            }}
+                          >
                             {row.name}
                           </TableCell>
                         </TableRow>
@@ -120,79 +148,152 @@ function PokemonsList() {
         <Divider orientation="vertical" flexItem />
         <Divider orientation="vertical" flexItem />
         <Divider orientation="vertical" flexItem />
-        <Grid item xs={5}>
+        <Divider orientation="vertical" flexItem />
+        <Divider orientation="vertical" flexItem />
+        <Grid item xs={6}>
           <Grid
             container
             justify="center"
             alignItems="center"
             direction="column"
           >
-            <Box sx={{ flexGrow: 1, marginTop: '20px', width: '90%' }}>
-              <Paper
+            <Box sx={{ flexGrow: 1, width: '90%' }}>
+              <div
                 sx={{
-                  width: '170px',
-                  height: '170px',
-                  marginTop: 0,
-                  marginLeft: '32%',
+                  backgroundImage:
+                    'url(https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/25.svg)',
                 }}
               >
-                <img
-                  className="photo"
-                  src={pokemonData.img}
-                  alt={pokemonData.name}
-                />
-              </Paper>
-              <Grid
-                container
-                spacing={0.5}
-                sx={{ marginTop: '20px', marginLeft: '15%' }}
-              >
-                <Grid
-                  item
-                  xs={12}
+                <Button
                   sx={{
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                    fontSize: '24px',
+                    width: '200px',
+                    height: '200px',
+                    marginTop: 0,
+                    marginLeft: '32%',
+                    backgroundColor: '#b4b2b2',
                   }}
+                  onClick={() => handleClick2(pokemonData)}
                 >
-                  {pokemonData.name}
+                  <img
+                    className="photo"
+                    src={pokemonData.img}
+                    alt={pokemonData.name}
+                  />
+                </Button>
+              </div>
+
+              <Box
+                sx={{
+                  backgroundColor: '#b4b2b2',
+                  marginLeft: '20px',
+                  marginTop: '20px',
+                  padding: '5px 20px 5px 20px',
+                  width: '100%',
+                  borderRadius: '20px',
+                }}
+              >
+                <Grid container spacing={0.5}>
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{
+                      fontWeight: 'bold',
+                      textAlign: 'center',
+                      fontSize: '24px',
+                    }}
+                  >
+                    {pokemonData.id}. {pokemonData.name}
+                  </Grid>
+                  <Grid container spacing={0.5} sx={{ marginTop: '5px' }}>
+                    <Grid
+                      item
+                      xs={6}
+                      sx={{ fontWeight: 'bold', textAlign: 'center' }}
+                    >
+                      {pokemonData.type1}
+                    </Grid>
+                    {pokemonData.type2?.length > 0 && (
+                      <Grid
+                        item
+                        xs={6}
+                        sx={{ fontWeight: 'bold', textAlign: 'center' }}
+                      >
+                        {pokemonData.type2}
+                      </Grid>
+                    )}
+                  </Grid>
                 </Grid>
-                <Grid
-                  item
-                  xs={6}
-                  sx={{ fontWeight: 'bold', textAlign: 'center' }}
-                >
-                  {pokemonData.type1}
+                <Grid container spacing={0.5} sx={{ marginTop: '20px' }}>
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{ fontWeight: 'bold', padding: '10px' }}
+                  >
+                    HP:{' '}
+                    <LinearProgress
+                      variant="determinate"
+                      value={pokemonData.hp}
+                      sx={{
+                        display: 'flex',
+                        height: '20px',
+                        width: '75%',
+                        float: 'right',
+                      }}
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{ fontWeight: 'bold', padding: '10px' }}
+                  >
+                    ATTACK:{' '}
+                    <LinearProgress
+                      variant="determinate"
+                      value={pokemonData.attack}
+                      sx={{
+                        display: 'flex',
+                        height: '20px',
+                        width: '75%',
+                        float: 'right',
+                      }}
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{ fontWeight: 'bold', padding: '10px' }}
+                  >
+                    DEFENSE:{' '}
+                    <LinearProgress
+                      variant="determinate"
+                      value={pokemonData.defense}
+                      sx={{
+                        display: 'flex',
+                        height: '20px',
+                        width: '75%',
+                        float: 'right',
+                      }}
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{ fontWeight: 'bold', padding: '10px' }}
+                  >
+                    SPEED:{' '}
+                    <LinearProgress
+                      variant="determinate"
+                      value={pokemonData.speed}
+                      sx={{
+                        display: 'flex',
+                        height: '20px',
+                        width: '75%',
+                        float: 'right',
+                      }}
+                    />
+                  </Grid>
                 </Grid>
-                <Grid
-                  item
-                  xs={6}
-                  sx={{ fontWeight: 'bold', textAlign: 'center' }}
-                >
-                  {pokemonData.type2}
-                </Grid>
-              </Grid>
-              <Grid container spacing={0.5} sx={{ marginTop: '20px' }}>
-                <Grid item xs={12} sx={{ fontWeight: 'bold' }}>
-                  HP : {pokemonData.hp}
-                </Grid>
-                <Grid item xs={12} sx={{ fontWeight: 'bold' }}>
-                  ATTACK : {pokemonData.attack}
-                </Grid>
-                <Grid item xs={12} sx={{ fontWeight: 'bold' }}>
-                  SPECIAL ATTACK : {pokemonData.spattack}
-                </Grid>
-                <Grid item xs={12} sx={{ fontWeight: 'bold' }}>
-                  DEFENSE : {pokemonData.defense}
-                </Grid>
-                <Grid item xs={12} sx={{ fontWeight: 'bold' }}>
-                  SPECIAL DEFENSE : {pokemonData.defense}
-                </Grid>
-                <Grid item xs={12} sx={{ fontWeight: 'bold' }}>
-                  SPEED : {pokemonData.speed}
-                </Grid>
-              </Grid>
+              </Box>
             </Box>
           </Grid>
         </Grid>

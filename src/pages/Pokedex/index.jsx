@@ -10,11 +10,11 @@ function Pokedex() {
       alignItems="center"
       direction="column"
       sx={{
-        height: '90vh',
         width: '65%',
-        marginLeft: '50vh',
+        marginLeft: '15%',
         backgroundColor: '#fa0909',
         borderRadius: '40px',
+        marginTop: '15px',
       }}
     >
       <Box sx={{ flexGrow: 1, marginTop: '20px', width: '95%' }}>

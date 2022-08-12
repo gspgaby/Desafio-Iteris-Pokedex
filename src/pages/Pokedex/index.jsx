@@ -10,14 +10,14 @@ function Pokedex() {
       alignItems="center"
       direction="column"
       sx={{
-        width: '65%',
-        marginLeft: '15%',
+        minHeight: '70vh',
+        marginLeft: '30vh',
         backgroundColor: '#fa0909',
         borderRadius: '40px',
-        marginTop: '15px',
+        marginTop: '50px',
       }}
     >
-      <Box sx={{ flexGrow: 1, marginTop: '20px', width: '95%' }}>
+      <Box sx={{ flexGrow: 1, width: '95%' }}>
         <Grid container spacing={0.5}>
           <Grid item xs={12}>
             <PokemonsList />

@@ -20,6 +20,7 @@ function PokemonsList() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [pokemonData, setPokemonData] = useState({});
+  const [counter, setCounter] = useState(0);
   useEffect(() => {
     /* busca listagem de pokemoms */
     async function loadPokemon(limit = 1000, offset = 0) {
@@ -62,7 +63,7 @@ function PokemonsList() {
   };
 
   const handleClick2 = () => {
-    console.log('clicado');
+    setCounter(counter + 1);
   };
 
   return (
@@ -158,19 +159,37 @@ function PokemonsList() {
             direction="column"
           >
             <Box sx={{ flexGrow: 1, width: '90%' }}>
-              <div
-                sx={{
-                  backgroundImage:
-                    'url(https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/25.svg)',
-                }}
-              >
+              {pokemonData.name !== 'pikachu' ? (
                 <Button
                   sx={{
-                    width: '200px',
-                    height: '200px',
+                    width: '100%',
+                    height: '100%',
                     marginTop: 0,
-                    marginLeft: '32%',
+                    marginLeft: '10%',
                     backgroundColor: '#b4b2b2',
+                    borderRadius: '20px',
+                  }}
+                  disabled
+                >
+                  <img
+                    className="photo"
+                    src={pokemonData.img}
+                    alt={pokemonData.name}
+                  />
+                </Button>
+              ) : (
+                <Button
+                  sx={{
+                    width: '100%',
+                    height: '100%',
+                    marginTop: 0,
+                    marginLeft: '10%',
+                    backgroundColor: '#b4b2b2',
+                    borderRadius: '20px',
+                    backgroundImage:
+                      counter < 3
+                        ? ''
+                        : 'url(https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/25.svg)',
                   }}
                   onClick={() => handleClick2(pokemonData)}
                 >
@@ -180,8 +199,7 @@ function PokemonsList() {
                     alt={pokemonData.name}
                   />
                 </Button>
-              </div>
-
+              )}
               <Box
                 sx={{
                   backgroundColor: '#b4b2b2',

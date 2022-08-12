@@ -9,18 +9,6 @@ Criar um frontend com o catálogo de todos os Pokemons e suas respectivas inform
 
 O frontend deverá conter uma lista paginada dos pokemons, com uma ação para exibir os detalhes de um determinado pokemon do lado direito da lista caso o usuário clique em um dos nomes dos pokemons.
 
-Obrigatório
-
-- Uma listagem paginada de pokemons
-- Um componente de detalhe de pokemons
-- Um Easter Egg do Pikachu
-
-Opcional
-
-- Deixar a aplicação visualmente agradável
-- Adicionar responsividade
-- Configurar a sua aplicação para rodar dentro de um container
-
 ## Pré-requisitos necessários para a utilização da Aplicação
 
 - Instale NodeJS em seu computador.

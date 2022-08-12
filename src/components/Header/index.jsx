@@ -8,8 +8,8 @@ function Header() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
-        position="static"
-        sx={{ backgroundColor: '#fa0909', width: '100vw', height: '70px' }}
+        position="fixed"
+        sx={{ backgroundColor: '#fa0909', width: '100vw' }}
       >
         <img className="logo" src={Logo} alt="RENOVA BR" />
       </AppBar>
